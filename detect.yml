@@ -1,0 +1,7 @@
+autoCorrect: true
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated:
+      - "Composable"
