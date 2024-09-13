@@ -22,7 +22,7 @@ internal class SearchRepositoryImpl(
                         )
                     }
                 }
-                Result.failure(Exception(message = response.code().toString()))
+                Result.failure(Exception())
             } catch (exception: Exception){
                 Result.failure(exception)
             }
