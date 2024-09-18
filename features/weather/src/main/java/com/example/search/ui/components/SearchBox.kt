@@ -22,46 +22,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.search.ui.state.CityWeatherEvent
 
 @Composable
-internal fun SearchBox(){
+internal fun SearchBox(
+    onEvent: (CityWeatherEvent) -> Unit,
+) {
     var text by remember { mutableStateOf("") }
 
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp)),
     ) {
-        Row(
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+        )
+
+        TextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp)),
-        ) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-            )
-
-            TextField(
-                modifier = Modifier
-                    .weight(1f),
-                value = text,
-                onValueChange = { s ->
-                    text = s
-                }
-            )
-
-            Button(
-                modifier = Modifier
-                    .background(Color.Yellow),
-                onClick = {
-
-                }
-            ) {
-                Text(
-                    text = "Найти",
-                )
+                .weight(1f),
+            value = text,
+            onValueChange = { s ->
+                text = s
             }
+        )
+
+        Button(
+            modifier = Modifier
+                .background(Color.Yellow),
+            onClick = {
+                onEvent(CityWeatherEvent.OnSearchCity(cityName = text))
+            }
+        ) {
+            Text(
+                text = "Найти",
+            )
         }
     }
 }

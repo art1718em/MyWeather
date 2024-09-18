@@ -4,14 +4,12 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.example.search.api.CityWeatherWrapper
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WeatherDestination
+data object FavouritesDestination
 
-fun NavGraphBuilder.weatherDestination(
+fun NavGraphBuilder.favouritesDestination(
     navigateBack: () -> Unit,
 ){
     composable<CityWeatherDestination> (

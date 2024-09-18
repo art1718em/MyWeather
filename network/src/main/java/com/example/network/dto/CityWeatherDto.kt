@@ -7,7 +7,7 @@ internal data class CityWeatherDto(
     @SerializedName("name")
     val name: String,
     @SerializedName("weather")
-    val weatherDto: WeatherDto,
+    val weatherDto: List<WeatherDto>,
     @SerializedName("main")
     val mainDto: MainDto,
 )
@@ -15,7 +15,7 @@ internal data class CityWeatherDto(
 internal fun CityWeatherDto.toCityWeather(): CityWeather{
     return CityWeather(
         name = name,
-        description =  weatherDto.description,
+        description =  weatherDto[0].description,
         temperature = mainDto.temperature,
         temperatureFeelsLike = mainDto.temperatureFeelsLike,
         humidity = mainDto.humidity,

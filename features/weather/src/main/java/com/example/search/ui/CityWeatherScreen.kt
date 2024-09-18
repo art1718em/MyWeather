@@ -45,11 +45,13 @@ internal fun CityWeatherScreen(
 
     } else if (cityWeatherScreenState.error != null){
         if (cityWeatherScreenState.error == WeatherError.NOT_SELECTED_CITY){
-            SearchBox()
+            SearchBox(onEvent = onEvent)
+            Text("Введите город или выберите из избранного")
         }
     } else {
         CityWeatherScreenContent(
             cityWeatherUiModel = cityWeatherScreenState.cityWeatherUiModel,
+            onEvent = onEvent,
         )
     }
 
@@ -59,6 +61,22 @@ internal fun CityWeatherScreen(
 @Composable
 private fun CityWeatherScreenContent(
     cityWeatherUiModel: CityWeatherUiModel,
+    onEvent: (CityWeatherEvent) -> Unit,
 ){
-    SearchBox()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+    ) {
+        SearchBox(
+            onEvent = onEvent,
+        )
+
+        Text(text = "Город " + cityWeatherUiModel.name)
+        Text(text = "Описание " + cityWeatherUiModel.description)
+        Text(text = "Темература " + cityWeatherUiModel.temperature)
+        Text(text = "Температура ощущается " + cityWeatherUiModel.temperatureFeelsLike)
+        Text(text = "Давление " + cityWeatherUiModel.humidity)
+        Text(text = "Влажность " + cityWeatherUiModel.pressure)
+    }
 }

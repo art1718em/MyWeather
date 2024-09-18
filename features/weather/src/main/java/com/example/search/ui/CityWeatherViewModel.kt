@@ -1,5 +1,6 @@
 package com.example.search.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.model.City
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CityWeatherViewModel @Inject constructor(
+internal class CityWeatherViewModel @Inject constructor(
     private val getCityWeatherUseCase: GetCityWeatherUseCase,
     private val getSelectedCityUseCase: GetSelectedCityUseCase,
     private val likeCityUseCase: LikeCityUseCase,
@@ -38,20 +39,8 @@ class CityWeatherViewModel @Inject constructor(
 
     private fun loadCity() {
         _state.value = state.value.copy(
-            isLoading = true,
+            error = WeatherError.NOT_SELECTED_CITY,
         )
-
-        viewModelScope.launch {
-            val cityName = getSelectedCityUseCase()
-            if (cityName != null) {
-                searchCityWeather(cityName)
-            } else {
-                _state.value = state.value.copy(
-                    isLoading = false,
-                    error = WeatherError.NOT_SELECTED_CITY,
-                )
-            }
-        }
     }
 
     private fun searchCityWeather(cityName: String) {
@@ -61,13 +50,16 @@ class CityWeatherViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = getCityWeatherUseCase(cityName = cityName)
+            Log.d("mytag", "Пришли данные")
             if (result is Result.Success) {
+                Log.d("mytag", "успех")
                 _state.value = state.value.copy(
                     isLoading = false,
                     error = null,
                     cityWeatherUiModel = result.data.toCityWeatherUiModel(),
                 )
             } else if (result is Result.Error) {
+                Log.d("mytag", "ошибка")
                 _state.value = state.value.copy(
                     isLoading = false,
                     error = result.error,
