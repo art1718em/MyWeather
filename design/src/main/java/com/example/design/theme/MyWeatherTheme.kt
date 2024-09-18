@@ -1,5 +1,4 @@
-package com.example.myweather.ui.theme
-
+package com.example.design.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider

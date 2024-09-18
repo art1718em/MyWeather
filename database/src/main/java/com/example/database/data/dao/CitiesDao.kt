@@ -21,7 +21,10 @@ internal interface CitiesDao {
     @Query("UPDATE favourite_cities SET isSelected = :isSelected WHERE name = :cityName")
     fun changeIsSelected(cityName: String, isSelected: Boolean)
 
+    @Query("UPDATE favourite_cities SET isSelected = 0 WHERE isSelected = 1")
+    fun unselectCity()
+
     @Query("SELECT name FROM favourite_cities WHERE isSelected = 1")
-    fun getSelectedCity(): Flow<String?>
+    fun getSelectedCity(): String?
 
 }

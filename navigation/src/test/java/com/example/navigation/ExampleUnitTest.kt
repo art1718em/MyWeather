@@ -1,4 +1,4 @@
-package com.example.search
+package com.example.navigation
 
 import org.junit.Test
 

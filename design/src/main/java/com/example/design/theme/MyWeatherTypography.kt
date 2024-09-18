@@ -1,4 +1,4 @@
-package com.example.myweather.ui.theme
+package com.example.design.theme
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle

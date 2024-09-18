@@ -48,9 +48,15 @@ internal class CitiesDBManagerImpl(
         }
     }
 
-    override suspend fun getSelectedCity(): Flow<String?> {
+    override suspend fun getSelectedCity(): String? {
         return withContext(Dispatchers.IO){
             roomDatabase.citiesDao().getSelectedCity()
+        }
+    }
+
+    override suspend fun unselectCity() {
+        withContext(Dispatchers.IO){
+            roomDatabase.citiesDao().unselectCity()
         }
     }
 }
