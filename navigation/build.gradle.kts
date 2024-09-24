@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-
+    id("kotlin-parcelize")
 }
 
 android {
@@ -64,4 +64,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":features:weather"))
+    implementation(project(":features:favourites"))
 }

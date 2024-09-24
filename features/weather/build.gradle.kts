@@ -65,4 +65,5 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":model"))
     implementation(project(":database"))
+    implementation(project(":design"))
 }

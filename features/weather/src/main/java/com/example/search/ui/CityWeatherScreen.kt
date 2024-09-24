@@ -1,32 +1,12 @@
 package com.example.search.ui
 
-import android.view.RoundedCorner
-import androidx.compose.foundation.background
-import androidx.compose.foundation.content.contentReceiver
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.search.domain.model.WeatherError
 import com.example.search.ui.components.SearchBox
@@ -38,20 +18,28 @@ import com.example.search.ui.state.CityWeatherUiModel
 internal fun CityWeatherScreen(
     cityWeatherScreenState: CityWeatherScreenState,
     onEvent: (CityWeatherEvent) -> Unit,
-){
+    navigateToFavourites: () -> Unit,
+) {
 
 
-    if (cityWeatherScreenState.isLoading){
+    if (cityWeatherScreenState.isLoading) {
 
-    } else if (cityWeatherScreenState.error != null){
-        if (cityWeatherScreenState.error == WeatherError.NOT_SELECTED_CITY){
-            SearchBox(onEvent = onEvent)
-            Text("Введите город или выберите из избранного")
+    } else if (cityWeatherScreenState.error != null) {
+        if (cityWeatherScreenState.error == WeatherError.NOT_SELECTED_CITY) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+            ) {
+                SearchBox(onEvent = onEvent)
+                Text("Введите город или выберите из избранного")
+            }
         }
     } else {
         CityWeatherScreenContent(
             cityWeatherUiModel = cityWeatherScreenState.cityWeatherUiModel,
             onEvent = onEvent,
+            navigateToFavourites = navigateToFavourites,
         )
     }
 
@@ -62,11 +50,12 @@ internal fun CityWeatherScreen(
 private fun CityWeatherScreenContent(
     cityWeatherUiModel: CityWeatherUiModel,
     onEvent: (CityWeatherEvent) -> Unit,
-){
+    navigateToFavourites: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(vertical = 8.dp),
     ) {
         SearchBox(
             onEvent = onEvent,
@@ -78,5 +67,19 @@ private fun CityWeatherScreenContent(
         Text(text = "Температура ощущается " + cityWeatherUiModel.temperatureFeelsLike)
         Text(text = "Давление " + cityWeatherUiModel.humidity)
         Text(text = "Влажность " + cityWeatherUiModel.pressure)
+
+        Button(
+            onClick = {
+                onEvent(CityWeatherEvent.OnLikeCity(cityName = cityWeatherUiModel.name))
+            }
+        ){
+            Text(text = "Добавить в избранное")
+        }
+
+        Button(
+            onClick = navigateToFavourites,
+        ){
+            Text(text = "Перейти в избранное")
+        }
     }
 }

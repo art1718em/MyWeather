@@ -12,25 +12,22 @@ import com.example.search.ui.CityWeatherViewModel
 import com.example.search.ui.state.CityWeatherEvent
 
 @Composable
-fun CityWeatherWrapper(cityName: String){
+fun CityWeatherWrapper(
+    navigateToFavourites: () -> Unit,
+){
     val cityWeatherViewModel = hiltViewModel<CityWeatherViewModel>()
 
     val state by cityWeatherViewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        if (cityName == "DefaultCity"){
-            cityWeatherViewModel.obtainEvent(
-                CityWeatherEvent.OnEnterScreen
-            )
-        } else {
-            cityWeatherViewModel.obtainEvent(
-                CityWeatherEvent.OnSearchCity(cityName)
-            )
-        }
+        cityWeatherViewModel.obtainEvent(
+            CityWeatherEvent.OnEnterScreen
+        )
     }
 
     CityWeatherScreen(
         cityWeatherScreenState = state,
         onEvent = cityWeatherViewModel::obtainEvent,
+        navigateToFavourites = navigateToFavourites,
     )
 }

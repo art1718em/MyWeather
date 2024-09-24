@@ -1,33 +1,36 @@
 package com.example.navigation.destinations
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.material3.Text
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import androidx.navigation.toRoute
 import com.example.search.api.CityWeatherWrapper
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CityWeatherDestination(val cityName: String)
+data object CityWeatherDestination
 
 fun NavGraphBuilder.cityWeatherDestination(
     navigateToFavourites: () -> Unit,
 ) {
-    composable(
-        route = "cityWeather/{cityName}",
-        arguments = listOf(navArgument("cityName") { type = NavType.StringType }),
+    composable<CityWeatherDestination>(
         enterTransition = {
-            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700))
+            return@composable slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start, tween(durationMillis = 700)
+            )
         },
         popExitTransition = {
-            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700))
-        }
-    ) { navBackStackEntry ->
-        val cityName = navBackStackEntry.arguments?.getString("cityName") ?: "DefaultCity"
-        CityWeatherWrapper(cityName = cityName)
+            return@composable slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.End, tween(durationMillis = 700)
+            )
+        },
+    ) {
+        CityWeatherWrapper(
+            navigateToFavourites = navigateToFavourites,
+        )
     }
 }

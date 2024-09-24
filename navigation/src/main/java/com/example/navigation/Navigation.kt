@@ -1,8 +1,10 @@
 package com.example.navigation
 
 import android.util.Log
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.navigation.destinations.CityWeatherDestination
 import com.example.navigation.destinations.FavouritesDestination
@@ -15,14 +17,18 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "cityWeather/DefaultCity" // Provide a default value
+        startDestination = CityWeatherDestination,
     ) {
         cityWeatherDestination(
             navigateToFavourites = {
-                navController.navigate("favourites")
+                navController.navigate(FavouritesDestination)
             }
         )
 
-        // Other destinations like favourites
+        favouritesDestination(
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
     }
 }
