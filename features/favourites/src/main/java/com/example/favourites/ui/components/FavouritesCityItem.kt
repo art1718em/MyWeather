@@ -1,6 +1,7 @@
 package com.example.favourites.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +37,10 @@ internal fun FavouritesCityItem(
                 } else {
                     MyWeatherTheme.colors.background
                 }
-            ),
+            )
+            .clickable {
+                onClick()
+            },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -1,5 +1,6 @@
 package com.example.database
 
+import android.util.Log
 import com.example.database.api.CitiesDBManager
 import com.example.database.data.db.FavouriteCitesDB
 import com.example.database.data.dbo.CityEntity
@@ -43,17 +44,6 @@ internal class CitiesDBManagerImpl(
         withContext(Dispatchers.IO) {
             roomDatabase.citiesDao().deleteCity(cityName = cityName)
         }
-
-        val selectedCity = getSelectedCity()
-        if (selectedCity == null){
-            val firstEntity = roomDatabase.citiesDao().getFirstItem()
-            firstEntity?.let { cityEntity ->
-                roomDatabase.citiesDao().changeIsSelected(
-                    cityName = cityEntity.name,
-                    isSelected = true,
-                )
-            }
-        }
     }
 
     override suspend fun changeIsSelected(cityName: String, isSelected: Boolean) {
@@ -65,7 +55,7 @@ internal class CitiesDBManagerImpl(
         }
     }
 
-    override suspend fun getSelectedCity(): String? {
+    override suspend fun getSelectedCity(): Flow<String?> {
         return withContext(Dispatchers.IO){
             roomDatabase.citiesDao().getSelectedCity()
         }
@@ -80,6 +70,12 @@ internal class CitiesDBManagerImpl(
     override suspend fun isCityExist(cityName: String): Boolean {
         return withContext(Dispatchers.IO){
             roomDatabase.citiesDao().isCityExists(cityName = cityName) > 0
+        }
+    }
+
+    override suspend fun getFirstCity(): String? {
+        return withContext(Dispatchers.IO){
+            roomDatabase.citiesDao().getFirstItem()?.name
         }
     }
 }

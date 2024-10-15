@@ -13,9 +13,11 @@ interface CitiesDBManager {
 
     suspend fun changeIsSelected(cityName: String, isSelected: Boolean)
 
-    suspend fun getSelectedCity(): String?
+    suspend fun getSelectedCity(): Flow<String?>
 
     suspend fun unselectCity()
 
     suspend fun isCityExist(cityName: String): Boolean
+
+    suspend fun getFirstCity(): String?
 }

@@ -25,7 +25,7 @@ internal interface CitiesDao {
     fun unselectCity()
 
     @Query("SELECT name FROM favourite_cities WHERE isSelected = 1")
-    fun getSelectedCity(): String?
+    fun getSelectedCity(): Flow<String?>
 
     @Query("SELECT * FROM favourite_cities ORDER BY id ASC LIMIT 1")
     fun getFirstItem(): CityEntity?

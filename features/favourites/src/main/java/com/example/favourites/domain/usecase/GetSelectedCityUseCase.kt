@@ -1,4 +1,4 @@
-package com.example.search.domain.usecase
+package com.example.favourites.domain.usecase
 
 import com.example.database.api.CitiesDBManager
 import kotlinx.coroutines.flow.Flow
