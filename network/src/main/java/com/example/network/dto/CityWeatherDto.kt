@@ -2,6 +2,7 @@ package com.example.network.dto
 
 import com.example.model.CityWeather
 import com.google.gson.annotations.SerializedName
+import kotlin.math.roundToInt
 
 internal data class CityWeatherDto(
     @SerializedName("name")
@@ -16,10 +17,13 @@ internal fun CityWeatherDto.toCityWeather(): CityWeather{
     return CityWeather(
         name = name,
         description =  weatherDto[0].description,
-        temperature = mainDto.temperature,
-        temperatureFeelsLike = mainDto.temperatureFeelsLike,
+        // перевод из кельвинов в градусы цельсия
+        temperature = (mainDto.temperature - 273).roundToInt(),
+        // перевод из кельвинов в градусы цельсия
+        temperatureFeelsLike = (mainDto.temperatureFeelsLike - 273).roundToInt(),
         humidity = mainDto.humidity,
-        pressure = mainDto.pressure,
+        // перевод из паскалей в мм ртутного столба
+        pressure = (mainDto.pressure * 0.75).toInt(),
     )
 }
 

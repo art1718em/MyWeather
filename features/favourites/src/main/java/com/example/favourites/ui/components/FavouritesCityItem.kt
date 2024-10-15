@@ -9,11 +9,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.design.components.FavouriteIcon
 import com.example.design.theme.MyWeatherTheme
 import com.example.favourites.ui.state.FavouriteCityUIModel
 import com.example.favourites.ui.state.FavouritesEvent
@@ -42,10 +44,11 @@ internal fun FavouritesCityItem(
             text = favouriteCityUIModel.cityName,
         )
 
-        Icon(
-            imageVector = Icons.Default.Favorite,
-            tint = MyWeatherTheme.colors.filledLike,
-            contentDescription = null,
-        )
+        IconButton(
+            onClick = onDislike,
+        ) {
+            FavouriteIcon(true)
+        }
+
     }
 }

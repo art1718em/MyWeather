@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 data class MyWeatherTypography(
+    val bodyLarge: TextStyle,
     val bodyMedium: TextStyle,
 )
 
@@ -15,8 +16,12 @@ internal val LocalMyWeatherTypography = staticCompositionLocalOf<MyWeatherTypogr
 
 internal fun provideMyWeatherTypography(): MyWeatherTypography {
     return MyWeatherTypography(
+        bodyLarge = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+        ),
         bodyMedium = TextStyle(
-            fontSize = 14.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Normal,
         )
     )

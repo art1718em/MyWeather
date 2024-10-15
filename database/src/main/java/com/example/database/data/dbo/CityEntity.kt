@@ -3,7 +3,7 @@ package com.example.database.data.dbo
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.model.City
+import com.example.model.CityWeather
 
 @Entity(tableName = "favourite_cities")
 internal data class CityEntity(
@@ -12,9 +12,13 @@ internal data class CityEntity(
     @ColumnInfo("isSelected") val isSelected: Boolean,
 )
 
-internal fun CityEntity.toCity(): City {
-    return City(
+internal fun CityEntity.toCityWeather() : CityWeather{
+    return CityWeather(
         name = name,
-        isSelected = isSelected,
+        description = null,
+        temperature = null,
+        temperatureFeelsLike = null,
+        humidity = null,
+        pressure = null,
     )
 }

@@ -44,7 +44,7 @@ internal fun SearchBox(
     ) {
         Icon(
             modifier = Modifier
-                .padding(start = 4.dp),
+                .padding(start = 8.dp),
             imageVector = Icons.Default.Search,
             contentDescription = null,
         )

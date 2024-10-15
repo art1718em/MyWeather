@@ -20,6 +20,7 @@ internal class SearchRepositoryImpl(
         Log.d("mytag", "Вошли в репозиторий")
            return withContext(Dispatchers.IO) {
             try{
+                Log.d("mytag", "Посылаем запрос")
                 val response = searchApi.getCityWeather(cityName = cityName)
                 Log.d("mytag", response.toString())
                 if (response.isSuccessful){

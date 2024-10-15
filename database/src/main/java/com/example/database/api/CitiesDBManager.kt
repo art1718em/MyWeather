@@ -1,13 +1,13 @@
 package com.example.database.api
 
-import com.example.model.City
+import com.example.model.CityWeather
 import kotlinx.coroutines.flow.Flow
 
 interface CitiesDBManager {
 
-    suspend fun getAll(): Flow<List<City>>
+    suspend fun getAll(): Flow<List<CityWeather>>
 
-    suspend fun addCity(city: City)
+    suspend fun addCity(cityName: String)
 
     suspend fun deleteCity(cityName: String)
 

@@ -3,7 +3,9 @@ package com.example.search.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.model.City
+import com.example.likes.api.LikeCenter
+import com.example.likes.api.LikeInteractor
+import com.example.likes.api.LikeStatus
 import com.example.model.CityWeather
 import com.example.model.Result
 import com.example.search.domain.model.WeatherError
@@ -14,6 +16,7 @@ import com.example.search.ui.state.CityWeatherEvent
 import com.example.search.ui.state.CityWeatherScreenState
 import com.example.search.ui.state.CityWeatherUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,23 +27,33 @@ internal class CityWeatherViewModel @Inject constructor(
     private val getCityWeatherUseCase: GetCityWeatherUseCase,
     private val getSelectedCityUseCase: GetSelectedCityUseCase,
     private val likeCityUseCase: LikeCityUseCase,
+    private val likeCenter: LikeCenter,
+    private val likeInteractor: LikeInteractor,
 ) : ViewModel() {
+
+    init{
+        Log.d("mytag1", "create vm")
+    }
 
     private val _state = MutableStateFlow(CityWeatherScreenState.default)
     val state = _state.asStateFlow()
+
+    var collectLikeJob: Job? = null
 
     fun obtainEvent(event: CityWeatherEvent) {
         when (event) {
             is CityWeatherEvent.OnEnterScreen -> loadCity()
             is CityWeatherEvent.OnSearchCity -> searchCityWeather(cityName = event.cityName)
-            is CityWeatherEvent.OnLikeCity -> likeCity(cityName = event.cityName)
+            is CityWeatherEvent.OnLikeCity -> changeCityLikesState(cityName = event.cityName)
         }
     }
 
     private fun loadCity() {
-        _state.value = state.value.copy(
-            error = WeatherError.NOT_SELECTED_CITY,
-        )
+        if (state.value.cityWeatherUiModel == CityWeatherUiModel.default){
+            _state.value = state.value.copy(
+                error = WeatherError.NOT_SELECTED_CITY,
+            )
+        }
     }
 
     private fun searchCityWeather(cityName: String) {
@@ -50,16 +63,26 @@ internal class CityWeatherViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = getCityWeatherUseCase(cityName = cityName)
-            Log.d("mytag", "Пришли данные")
             if (result is Result.Success) {
-                Log.d("mytag", "успех")
                 _state.value = state.value.copy(
                     isLoading = false,
                     error = null,
-                    cityWeatherUiModel = result.data.toCityWeatherUiModel(),
+                    cityWeatherUiModel = result.data.toCityWeatherUiModel(true),
                 )
+
+                collectLikeJob?.cancel()
+
+                collectLikeJob = viewModelScope.launch {
+                    likeInteractor.getLikeCityFlow(state.value.cityWeatherUiModel.name).collect{
+                        _state.value = state.value.copy(
+                            cityWeatherUiModel = state.value.cityWeatherUiModel.copy(
+                                isLiked = it
+                            )
+                        )
+                    }
+                }
+
             } else if (result is Result.Error) {
-                Log.d("mytag", "ошибка")
                 _state.value = state.value.copy(
                     isLoading = false,
                     error = result.error,
@@ -68,19 +91,21 @@ internal class CityWeatherViewModel @Inject constructor(
         }
     }
 
-    private fun likeCity(cityName: String) {
+    private fun changeCityLikesState(cityName: String) {
         viewModelScope.launch {
-            likeCityUseCase(
-                city = City(
-                    name = cityName,
-                    isSelected = true,
-                ),
+            likeCenter.setLikeStatus(
+                LikeStatus(cityName = cityName, isLiked = !state.value.cityWeatherUiModel.isLiked)
             )
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("mytag1", "clear vm")
+    }
 }
 
-private fun CityWeather.toCityWeatherUiModel(): CityWeatherUiModel {
+private fun CityWeather.toCityWeatherUiModel(isLiked: Boolean): CityWeatherUiModel {
     return CityWeatherUiModel(
         name = name,
         description = description,
@@ -88,5 +113,6 @@ private fun CityWeather.toCityWeatherUiModel(): CityWeatherUiModel {
         temperatureFeelsLike = temperatureFeelsLike,
         humidity = humidity,
         pressure = pressure,
+        isLiked = isLiked,
     )
 }

@@ -3,8 +3,8 @@ package com.example.database
 import com.example.database.api.CitiesDBManager
 import com.example.database.data.db.FavouriteCitesDB
 import com.example.database.data.dbo.CityEntity
-import com.example.database.data.dbo.toCity
-import com.example.model.City
+import com.example.database.data.dbo.toCityWeather
+import com.example.model.CityWeather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -14,20 +14,20 @@ import kotlinx.coroutines.withContext
 internal class CitiesDBManagerImpl(
     private val roomDatabase: FavouriteCitesDB,
 ) : CitiesDBManager {
-    override suspend fun getAll(): Flow<List<City>> {
+    override suspend fun getAll(): Flow<List<CityWeather>> {
         return withContext(Dispatchers.IO) {
             roomDatabase.citiesDao().getAll().distinctUntilChanged()
-                .map { cities -> cities.map { it.toCity() } }
+                .map { cities -> cities.map { it.toCityWeather() } }
         }
     }
 
-    override suspend fun addCity(city: City) {
+    override suspend fun addCity(cityName: String) {
         withContext(Dispatchers.IO) {
             roomDatabase.citiesDao().insertCity(
                 cityEntity = CityEntity(
                     id = null,
-                    name = city.name,
-                    isSelected = city.isSelected,
+                    name = cityName,
+                    isSelected = true,
                 )
             )
         }

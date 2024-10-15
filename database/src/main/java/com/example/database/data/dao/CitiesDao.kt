@@ -27,4 +27,5 @@ internal interface CitiesDao {
     @Query("SELECT name FROM favourite_cities WHERE isSelected = 1")
     fun getSelectedCity(): String?
 
+
 }

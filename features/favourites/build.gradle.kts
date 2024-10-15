@@ -67,4 +67,5 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":database"))
     implementation(project(":design"))
+    implementation(project(":features:likes"))
 }
