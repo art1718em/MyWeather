@@ -21,8 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.design.components.MyWeatherButton
 import com.example.design.theme.MyWeatherTheme
+import com.example.features.search.R
 import com.example.search.ui.state.CityWeatherEvent
 
 @Composable
@@ -65,23 +68,11 @@ internal fun SearchBox(
             }
         )
 
-        Button(
-            modifier = Modifier
-                .padding(
-                    start = 4.dp,
-                    end = 8.dp,
-                ),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MyWeatherTheme.colors.button,
-                contentColor = MyWeatherTheme.colors.mainText,
-            ),
-            onClick = {
-                onEvent(CityWeatherEvent.OnSearchCity(cityName = text))
-            }
-        ) {
-            Text(
-                text = "Найти",
-            )
-        }
+       MyWeatherButton(
+           onClick = {
+               onEvent(CityWeatherEvent.OnSearchCity(cityName = text))
+           },
+           text = stringResource(R.string.search),
+       )
     }
 }

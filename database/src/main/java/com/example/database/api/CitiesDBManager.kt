@@ -16,4 +16,6 @@ interface CitiesDBManager {
     suspend fun getSelectedCity(): String?
 
     suspend fun unselectCity()
+
+    suspend fun isCityExist(cityName: String): Boolean
 }

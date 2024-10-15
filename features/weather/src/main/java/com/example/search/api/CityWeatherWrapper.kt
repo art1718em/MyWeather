@@ -1,12 +1,10 @@
 package com.example.search.api
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.search.ui.CityWeatherScreen
 import com.example.search.ui.CityWeatherViewModel
 import com.example.search.ui.state.CityWeatherEvent
@@ -28,6 +26,6 @@ fun CityWeatherWrapper(
     CityWeatherScreen(
         cityWeatherScreenState = state,
         onEvent = cityWeatherViewModel::obtainEvent,
-        navigateToFavourites = navigateToFavourites,
+        onNavigateToFavourites = navigateToFavourites,
     )
 }

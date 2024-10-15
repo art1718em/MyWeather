@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feels_like">"Ощущается как "</string>
+    <string name="celsius_icon">℃</string>
+    <string name="percent">%</string>
+    <string name="millimeters_of_mercury">" мм рт. ст."</string>
+    <string name="input_city_or_choose_from_favourites">Введите город или выберите из избранного</string>
+    <string name="search">Найти</string>
+</resources>

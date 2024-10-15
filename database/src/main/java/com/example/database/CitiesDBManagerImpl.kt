@@ -31,11 +31,28 @@ internal class CitiesDBManagerImpl(
                 )
             )
         }
+
+        unselectCity()
+        changeIsSelected(
+            cityName = cityName,
+            isSelected = true,
+        )
     }
 
     override suspend fun deleteCity(cityName: String) {
         withContext(Dispatchers.IO) {
             roomDatabase.citiesDao().deleteCity(cityName = cityName)
+        }
+
+        val selectedCity = getSelectedCity()
+        if (selectedCity == null){
+            val firstEntity = roomDatabase.citiesDao().getFirstItem()
+            firstEntity?.let { cityEntity ->
+                roomDatabase.citiesDao().changeIsSelected(
+                    cityName = cityEntity.name,
+                    isSelected = true,
+                )
+            }
         }
     }
 
@@ -57,6 +74,12 @@ internal class CitiesDBManagerImpl(
     override suspend fun unselectCity() {
         withContext(Dispatchers.IO){
             roomDatabase.citiesDao().unselectCity()
+        }
+    }
+
+    override suspend fun isCityExist(cityName: String): Boolean {
+        return withContext(Dispatchers.IO){
+            roomDatabase.citiesDao().isCityExists(cityName = cityName) > 0
         }
     }
 }

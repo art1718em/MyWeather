@@ -10,7 +10,7 @@ data class CityWeatherScreenState(
     companion object{
         val default = CityWeatherScreenState(
             cityWeatherUiModel = CityWeatherUiModel.default,
-            isLoading = false,
+            isLoading = true,
             error = null,
         )
     }

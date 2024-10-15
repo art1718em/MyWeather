@@ -27,5 +27,9 @@ internal interface CitiesDao {
     @Query("SELECT name FROM favourite_cities WHERE isSelected = 1")
     fun getSelectedCity(): String?
 
+    @Query("SELECT * FROM favourite_cities ORDER BY id ASC LIMIT 1")
+    fun getFirstItem(): CityEntity?
 
+    @Query("SELECT COUNT(*) FROM favourite_cities WHERE name = :cityName")
+    suspend fun isCityExists(cityName: String): Int
 }
