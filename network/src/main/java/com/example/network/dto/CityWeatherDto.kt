@@ -1,6 +1,7 @@
 package com.example.network.dto
 
 import com.example.model.CityWeather
+import com.example.model.WeatherDescription
 import com.google.gson.annotations.SerializedName
 import kotlin.math.roundToInt
 
@@ -16,7 +17,7 @@ internal data class CityWeatherDto(
 internal fun CityWeatherDto.toCityWeather(): CityWeather{
     return CityWeather(
         name = name,
-        description =  weatherDto[0].description,
+        description =  fromString(weatherDto[0].description),
         // перевод из кельвинов в градусы цельсия
         temperature = (mainDto.temperature - 273).roundToInt(),
         // перевод из кельвинов в градусы цельсия
@@ -26,4 +27,22 @@ internal fun CityWeatherDto.toCityWeather(): CityWeather{
         pressure = (mainDto.pressure * 0.75).toInt(),
     )
 }
+
+private fun fromString(string: String): WeatherDescription {
+    return when (string) {
+        "ясно" -> WeatherDescription.CLEARLY
+        "пасмурно" -> WeatherDescription.DULL
+        "небольшая облачность" -> WeatherDescription.SLIGHT_CLOUD_COVER
+        "облачно с прояснениями" -> WeatherDescription.CLOUDY_WITH_CLARIFICATIONS
+        "переменная облачность" -> WeatherDescription.PARTLY_CLOUDY
+        "дождь" -> WeatherDescription.RAIN
+        "небольшой дождь" -> WeatherDescription.LIGHT_RAIN
+        "снег" -> WeatherDescription.SNOW
+        "ливень" -> WeatherDescription.RAINFALL
+        "гроза" -> WeatherDescription.THUNDERSTORM
+        "туман" -> WeatherDescription.FOG
+        else -> WeatherDescription.MIST
+    }
+}
+
 

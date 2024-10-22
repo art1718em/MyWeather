@@ -1,8 +1,10 @@
 package com.example.search.ui.state
 
+import com.example.model.WeatherDescription
+
 data class CityWeatherUiModel(
     val name: String,
-    val description: String?,
+    val description: WeatherDescription?,
     val temperature: Int?,
     val temperatureFeelsLike: Int?,
     val humidity: Int?,
@@ -12,7 +14,7 @@ data class CityWeatherUiModel(
     companion object{
         val default = CityWeatherUiModel(
             name = "",
-            description =  "",
+            description =  WeatherDescription.CLEARLY,
             temperature = 0,
             temperatureFeelsLike = 0,
             humidity = 0,

@@ -1,7 +1,11 @@
 package com.example.search.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.likes.api.LikeCenter
 import com.example.likes.api.LikeInteractor
 import com.example.likes.api.LikeStatus
@@ -15,11 +19,13 @@ import com.example.search.domain.usecase.UnselectCityUseCase
 import com.example.search.ui.state.CityWeatherEvent
 import com.example.search.ui.state.CityWeatherScreenState
 import com.example.search.ui.state.CityWeatherUiModel
+import com.example.workmanager.ToastWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +48,7 @@ internal class CityWeatherViewModel @Inject constructor(
             is CityWeatherEvent.OnEnterScreen -> loadCity()
             is CityWeatherEvent.OnSearchCity -> searchCityWeather(cityName = event.cityName)
             is CityWeatherEvent.OnLikeCity -> changeCityLikesState(cityName = event.cityName)
+            is CityWeatherEvent.OnSendNotification -> showToast(context = event.context)
         }
     }
 
@@ -118,6 +125,16 @@ internal class CityWeatherViewModel @Inject constructor(
                 LikeStatus(cityName = cityName, isLiked = !state.value.cityWeatherUiModel.isLiked)
             )
         }
+    }
+
+    private fun showToast(context: Context){
+        Toast.makeText(context, "Через 5 секунд вы получите сообщение!", Toast.LENGTH_LONG).show()
+        val workRequest = OneTimeWorkRequestBuilder<ToastWorker>()
+            .addTag("work")
+            .setInitialDelay(5, TimeUnit.SECONDS)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(workRequest)
     }
 }
 
