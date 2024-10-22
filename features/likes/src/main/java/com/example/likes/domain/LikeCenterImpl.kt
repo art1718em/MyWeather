@@ -23,6 +23,7 @@ internal class LikeCenterImpl @Inject constructor(
 
         if (likeStatus.isLiked){
             citiesDBManager.addCity(likeStatus.cityName)
+            citiesDBManager.updateSelectedCity(likeStatus.cityName)
         } else {
             citiesDBManager.deleteCity(likeStatus.cityName)
         }
